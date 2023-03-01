@@ -10,7 +10,7 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
-class secret_vault:
+class vault:
 	
 	buffer_size = 64 * 1024
 
@@ -74,7 +74,7 @@ def main():
 	path = os.path.expanduser('~/.vaultcfg')
 	if os.path.exists(path):
 		masterpwd = getpass("Enter your Master Password : ")
-		vault = secret_vault(masterpwd)
+		vault = vault(masterpwd)
 		vault.generate_key()
 		fernet = Fernet(vault.key)
 		with open(path, 'rb') as f:
@@ -87,7 +87,7 @@ def main():
 				exit()
 	else:
 		masterpwd = getpass("Create a Master Password : ")
-		vault = secret_vault(masterpwd)
+		vault = vault(masterpwd)
 		vault.generate_key()
 		fernet = Fernet(vault.key)
 		enc_mpwd = fernet.encrypt(masterpwd.encode())
@@ -163,7 +163,7 @@ def main():
 				confirm = input("\nDo you really want to delete and reset the vault?(Y or N) : ")
 				if confirm == 'y' or confirm == 'Y':
 					pwdCheck = getpass("\nEnter the password to confirm : ")
-					reset = secret_vault(pwdCheck)
+					reset = vault(pwdCheck)
 					reset.generate_key()
 					resetFernet = Fernet(reset.key)
 					path = os.path.expanduser('~/.vaultcfg')
